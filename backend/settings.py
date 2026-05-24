@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB', 'planmark'),
         'USER': os.getenv('POSTGRES_USER', 'planmark_user'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'planmark_password'),
-        'HOST': os.getenv('POSTGRES_HOST', 'host.docker.internal'),
+        'HOST': os.getenv('POSTGRES_HOST', 'db'),
         'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 }
