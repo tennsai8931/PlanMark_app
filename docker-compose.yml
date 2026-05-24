@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: planmark_db
+    environment:
+      POSTGRES_DB: planmark
+      POSTGRES_USER: planmark_user
+      POSTGRES_PASSWORD: planmark_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - planmark_db_data:/var/lib/postgresql/data
+
+volumes:
+  planmark_db_data:
