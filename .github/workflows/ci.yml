@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend Django Check
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install backend dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Django check
+        env:
+          DEBUG: "True"
+          SECRET_KEY: "ci-secret-key"
+          DB_ENGINE: "django.db.backends.sqlite3"
+        run: python manage.py check
+
+      - name: Run migrations check
+        env:
+          DEBUG: "True"
+          SECRET_KEY: "ci-secret-key"
+          DB_ENGINE: "django.db.backends.sqlite3"
+        run: python manage.py migrate --check
+
+  frontend:
+    name: Frontend Flutter Check
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Create frontend env
+        run: echo "API_BASE_URL=http://127.0.0.1:8000" > .env
+
+      - name: Install frontend dependencies
+        run: flutter pub get
+
+      - name: Analyze Flutter
+        run: flutter analyze
