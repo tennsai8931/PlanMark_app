@@ -34,12 +34,19 @@ jobs:
           DB_ENGINE: "django.db.backends.sqlite3"
         run: python manage.py check
 
-      - name: Run migrations check
+      - name: Check missing migrations
         env:
           DEBUG: "True"
           SECRET_KEY: "ci-secret-key"
           DB_ENGINE: "django.db.backends.sqlite3"
-        run: python manage.py migrate --check
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Run migrations
+        env:
+          DEBUG: "True"
+          SECRET_KEY: "ci-secret-key"
+          DB_ENGINE: "django.db.backends.sqlite3"
+        run: python manage.py migrate
 
   frontend:
     name: Frontend Flutter Check
